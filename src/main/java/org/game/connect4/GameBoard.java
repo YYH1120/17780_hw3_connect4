@@ -1,27 +1,27 @@
 package org.game.connect4;
 
 public class GameBoard {
-    int length;
-    int breadth;
-    GridPosition[][] grid;
+    int height;
+    int width;
+    char[][] grid;
 
     public GameBoard() {
-        this.length = 6;
-        this.breadth = 7;
-        grid = new GridPosition[length][breadth];
-        for(int row = 0; row < this.length; row++)
-            for(int col = 0; col < this.breadth; col++)
-                grid[row][col] = new GridPosition();
+        this.height = 6;
+        this.width = 7;
+        grid = new char[height][width];
+        for(int row = 0; row < this.height; row++)
+            for(int col = 0; col < this.width; col++)
+                grid[row][col] = '_';
 
     }
 
-    public GameBoard(int length, int breadth) {
-        this.length = length;
-        this.breadth = breadth;
-        grid = new GridPosition[length][breadth];
-        for(int row = 0; row < this.length; row++)
-            for(int col = 0; col < this.breadth; col++)
-                grid[row][col] = new GridPosition();
+    public GameBoard(int height, int width) {
+        this.height = height;
+        this.width = width;
+        grid = new char[height][width];
+        for(int row = 0; row < this.height; row++)
+            for(int col = 0; col < this.width; col++)
+                grid[row][col] = '_';
 
     }
 }

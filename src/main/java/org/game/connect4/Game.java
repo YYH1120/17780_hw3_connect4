@@ -5,9 +5,9 @@ import org.game.connect4.util.GameMode;
 public class Game {
     GameBoard gameBoard;
     GameMode gameMode;
-    int length;
-    int breadth;
-    String playerNam;
+    int height;
+    int width;
+    String player1;
     String player2;
 
 
