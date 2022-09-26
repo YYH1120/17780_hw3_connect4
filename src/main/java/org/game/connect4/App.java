@@ -1,5 +1,7 @@
 package org.game.connect4;
 
+import org.game.connect4.util.GameMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,21 @@ class App {
         a = 3;
         b = 1;
         System.out.println(c);
+//        Game game = new Game(GameMode.PLAYER_VS_PLAYER, "A", "B");
+//        game.Initialization();
+//        game.getGameGrid().displayGrid();
+//        game.playMove(0);
+//        game.switchPlayer();
+//        game.playMove(1);
+//        game.playMove(0);
+//        game.switchPlayer();
+//        game.playMove(1);
+//        game.playMove(0);
+//        game.switchPlayer();
+//        game.playMove(1);
+//        game.playMove(0);
+//        game.switchPlayer();
+//        game.playMove(1);
 
     }
 }

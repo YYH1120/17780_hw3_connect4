@@ -4,10 +4,10 @@ import org.game.connect4.util.PlayerID;
 import org.game.connect4.util.TokenColor;
 
 public class Player {
-    PlayerID id;
-    String name;
-    boolean isComputer;
-    TokenColor tokenColor;
+    private PlayerID id;
+    private String name;
+    private boolean isComputer;
+    private TokenColor tokenColor;
 
     public Player(PlayerID id, String name, boolean isComputer, TokenColor tokenColor) {
         this.id = id;
@@ -31,5 +31,17 @@ public class Player {
 
     public PlayerID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isComputer() {
+        return isComputer;
+    }
+
+    public TokenColor getTokenColor() {
+        return tokenColor;
     }
 }
