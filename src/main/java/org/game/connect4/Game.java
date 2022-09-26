@@ -19,15 +19,15 @@ public class Game {
     public Game (GameMode gameMode, String name1, String name2){
         this.gameMode = gameMode;
         this.gameGrid = new GameGrid();
-        this.player1 = new Player(PlayerID.PLAYER_1, name1);
-        this.player2 = new Player(PlayerID.PLAYER_2, name2);
+        this.player1 = new Player(PlayerID.PLAYER_1, name1, TokenColor.RED);
+        this.player2 = new Player(PlayerID.PLAYER_2, name2, TokenColor.BLUE);
     }
 
     public Game (GameMode gameMode, int height, int width, String name1, String name2){
         this.gameMode = gameMode;
         this.gameGrid = new GameGrid(height, width);
-        this.player1 = new Player(PlayerID.PLAYER_1, name1);
-        this.player2 = new Player(PlayerID.PLAYER_2, name2);
+        this.player1 = new Player(PlayerID.PLAYER_1, name1, TokenColor.RED);
+        this.player2 = new Player(PlayerID.PLAYER_2, name2, TokenColor.BLUE);
     }
 
     public void Initialization (){
@@ -49,20 +49,20 @@ public class Game {
         return currentPlayer;
     }
 
+    public GameGrid getGameGrid() {
+        return gameGrid;
+    }
+
     public GameStatus playMove(int column) {
         if(!isValidMove(column))
             throw new InvalidMoveException();
 
-        this.gameGrid.getGrid().get(column).add(this.getCurrentTokenColor().getSymbol());
+        this.gameGrid.getGrid().get(column).add(this.currentPlayer.tokenColor.getSymbol());
         return this.CheckWin(column);
     }
 
     public boolean isValidMove(int column) {
         return column >= 0 && this.gameGrid.getGrid().get(column).size() < this.gameGrid.getHeight();
-    }
-
-    private TokenColor getCurrentTokenColor() {
-        return this.currentPlayer.getId() == PlayerID.PLAYER_1 ? TokenColor.RED : TokenColor.BLUE;
     }
 
     public void switchPlayer() {
