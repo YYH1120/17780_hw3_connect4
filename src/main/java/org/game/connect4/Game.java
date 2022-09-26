@@ -8,25 +8,25 @@ import java.util.List;
 public class Game {
     private final GameBoard gameBoard;
     private final int gameMode;  // 0:pvp, 1:pvc, 2:cvc
-    private List<Player> playerList = new ArrayList<>();
+    private final List<Player> playerList = new ArrayList<>();
     private Player currentPlayer;
     private int lastCol; // the column index of last movement
 
     public Game (int gameMode, String name1, String name2){
         this.gameMode = gameMode;
         this.gameBoard = new GameBoard();
-        Player player1 = new Player(this.playerList.size(),name1);
+        Player player1 = new Player(this.playerList.size(), name1);
         this.playerList.add(player1);
-        Player player2 = new Player(this.playerList.size(),name2);
+        Player player2 = new Player(this.playerList.size(), name2);
         this.playerList.add(player2);
     }
 
     public Game (int gameMode, int height, int width, String name1, String name2){
         this.gameMode = gameMode;
         this.gameBoard = new GameBoard(height, width);
-        Player player1 = new Player(this.playerList.size(),name1);
+        Player player1 = new Player(this.playerList.size(), name1);
         this.playerList.add(player1);
-        Player player2 = new Player(this.playerList.size(),name2);
+        Player player2 = new Player(this.playerList.size(), name2);
         this.playerList.add(player2);
     }
 
@@ -39,6 +39,15 @@ public class Game {
             this.playerList.get(1).SetComputer();
         }
         this.currentPlayer = this.playerList.get(0);
+    }
+
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     // 0： game continue, 1: player1 won, 2: player2 won, 3: tie
