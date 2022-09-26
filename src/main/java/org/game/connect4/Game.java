@@ -1,6 +1,7 @@
 package org.game.connect4;
 
 import org.game.connect4.exception.InvalidMoveException;
+import org.game.connect4.util.GameMode;
 import org.game.connect4.util.GameStatus;
 import org.game.connect4.util.TokenColor;
 
@@ -9,11 +10,11 @@ import java.util.List;
 
 public class Game {
     private final GameBoard gameBoard;
-    private final int gameMode;  // 0:pvp, 1:pvc, 2:cvc
+    private final GameMode gameMode;  // 0:pvp, 1:pvc, 2:cvc
     private final List<Player> playerList = new ArrayList<>();
     private Player currentPlayer;
 
-    public Game (int gameMode, String name1, String name2){
+    public Game (GameMode gameMode, String name1, String name2){
         this.gameMode = gameMode;
         this.gameBoard = new GameBoard();
         Player player1 = new Player(this.playerList.size(), name1);
@@ -22,7 +23,7 @@ public class Game {
         this.playerList.add(player2);
     }
 
-    public Game (int gameMode, int height, int width, String name1, String name2){
+    public Game (GameMode gameMode, int height, int width, String name1, String name2){
         this.gameMode = gameMode;
         this.gameBoard = new GameBoard(height, width);
         Player player1 = new Player(this.playerList.size(), name1);
@@ -32,10 +33,10 @@ public class Game {
     }
 
     public void Initialization (){
-        if (this.gameMode == 1){
+        if (this.gameMode == GameMode.PLAYER_VS_COMPUTER){
             this.playerList.get(1).SetComputer();
         }
-        if (this.gameMode == 2){
+        if (this.gameMode == GameMode.COMPUTER_VS_COMPUTER){
             this.playerList.get(0).SetComputer();
             this.playerList.get(1).SetComputer();
         }
@@ -64,6 +65,10 @@ public class Game {
 
     private TokenColor getCurrentTokenColor() {
         return this.currentPlayer.getId() == 0 ? TokenColor.RED : TokenColor.BLUE;
+    }
+
+    public void switchPlayer() {
+        this.currentPlayer = this.currentPlayer == this.playerList.get(0) ? this.playerList.get(1) : this.playerList.get(0);
     }
 
     // 0： game continue, 1: player1 won, 2: player2 won, 3: tie
