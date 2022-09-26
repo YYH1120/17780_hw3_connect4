@@ -3,16 +3,16 @@ package org.game.connect4;
 import org.game.connect4.util.PlayerID;
 
 public class Player {
-    int id;
+    PlayerID id;
     String name;
     boolean isComputer;
 
-    public Player(int id, String name, boolean isComputer) {
+    public Player(PlayerID id, String name, boolean isComputer) {
         this.id = id;
         this.name = name;
         this.isComputer = isComputer;
     }
-    public Player(int id, String name) {
+    public Player(PlayerID id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -25,7 +25,7 @@ public class Player {
         this.isComputer = true;
     }
 
-    public int getId() {
+    public PlayerID getId() {
         return id;
     }
 }

@@ -4,7 +4,7 @@ public enum TokenColor {
     RED('R'),
     BLUE('B');
 
-    public final Character symbol;
+    private final Character symbol;
 
     private TokenColor(Character symbol) {
         this.symbol = symbol;

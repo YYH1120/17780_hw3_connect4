@@ -3,44 +3,42 @@ package org.game.connect4;
 import org.game.connect4.exception.InvalidMoveException;
 import org.game.connect4.util.GameMode;
 import org.game.connect4.util.GameStatus;
+import org.game.connect4.util.PlayerID;
 import org.game.connect4.util.TokenColor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    private final GameBoard gameBoard;
+    private final GameGrid gameGrid;
     private final GameMode gameMode;  // 0:pvp, 1:pvc, 2:cvc
-    private final List<Player> playerList = new ArrayList<>();
+    private Player player1;
+    private Player player2;
     private Player currentPlayer;
 
     public Game (GameMode gameMode, String name1, String name2){
         this.gameMode = gameMode;
-        this.gameBoard = new GameBoard();
-        Player player1 = new Player(this.playerList.size(), name1);
-        this.playerList.add(player1);
-        Player player2 = new Player(this.playerList.size(), name2);
-        this.playerList.add(player2);
+        this.gameGrid = new GameGrid();
+        this.player1 = new Player(PlayerID.PLAYER_1, name1);
+        this.player2 = new Player(PlayerID.PLAYER_2, name2);
     }
 
     public Game (GameMode gameMode, int height, int width, String name1, String name2){
         this.gameMode = gameMode;
-        this.gameBoard = new GameBoard(height, width);
-        Player player1 = new Player(this.playerList.size(), name1);
-        this.playerList.add(player1);
-        Player player2 = new Player(this.playerList.size(), name2);
-        this.playerList.add(player2);
+        this.gameGrid = new GameGrid(height, width);
+        this.player1 = new Player(PlayerID.PLAYER_1, name1);
+        this.player2 = new Player(PlayerID.PLAYER_2, name2);
     }
 
     public void Initialization (){
         if (this.gameMode == GameMode.PLAYER_VS_COMPUTER){
-            this.playerList.get(1).SetComputer();
+            this.player2.SetComputer();
         }
         if (this.gameMode == GameMode.COMPUTER_VS_COMPUTER){
-            this.playerList.get(0).SetComputer();
-            this.playerList.get(1).SetComputer();
+            this.player1.SetComputer();
+            this.player2.SetComputer();
         }
-        this.currentPlayer = this.playerList.get(0);
+        this.currentPlayer = this.player1;
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -55,26 +53,26 @@ public class Game {
         if(!isValidMove(column))
             throw new InvalidMoveException();
 
-        this.gameBoard.getGrid().get(column).add(this.getCurrentTokenColor().symbol);
+        this.gameGrid.getGrid().get(column).add(this.getCurrentTokenColor().getSymbol());
         return this.CheckWin(column);
     }
 
     public boolean isValidMove(int column) {
-        return column >= 0 && this.gameBoard.getGrid().get(column).size() < this.gameBoard.getHeight();
+        return column >= 0 && this.gameGrid.getGrid().get(column).size() < this.gameGrid.getHeight();
     }
 
     private TokenColor getCurrentTokenColor() {
-        return this.currentPlayer.getId() == 0 ? TokenColor.RED : TokenColor.BLUE;
+        return this.currentPlayer.getId() == PlayerID.PLAYER_1 ? TokenColor.RED : TokenColor.BLUE;
     }
 
     public void switchPlayer() {
-        this.currentPlayer = this.currentPlayer == this.playerList.get(0) ? this.playerList.get(1) : this.playerList.get(0);
+        this.currentPlayer = this.currentPlayer == this.player1 ? this.player2 : this.player1;
     }
 
     // 0： game continue, 1: player1 won, 2: player2 won, 3: tie
     // after checkWin, we change the current player
     public GameStatus CheckWin(int lastCol){
-        int lastRow = this.gameBoard.getGrid().get(lastCol).size()-1;
+        int lastRow = this.gameGrid.getGrid().get(lastCol).size()-1;
         int maxContinueR = 1;
         int maxContinueB = 1;
         int numContinueR = 1;
@@ -85,26 +83,26 @@ public class Game {
         row = lastRow;
         col = lastCol;
         // check player1 for row condition
-        while (this.currentPlayer.getId() == 0 && col - 1 >=0 && row < this.gameBoard.getGrid().get(col).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col - 1).get(row) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_1 && col - 1 >=0 && row < this.gameGrid.getGrid().get(col).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col - 1).get(row) ){
             numContinueR += 1;
             col -= 1;
         }
         col = lastCol;
-        while (this.currentPlayer.getId() == 0 && col + 1 < this.gameBoard.getGrid().size() && row < this.gameBoard.getGrid().get(col).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col + 1).get(row) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_1 && col + 1 < this.gameGrid.getGrid().size() && row < this.gameGrid.getGrid().get(col).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col + 1).get(row) ){
             numContinueR += 1;
             col += 1;
         }
         //check player2 for row condition
-        while (this.currentPlayer.getId() == 1 && col - 1 >=0 && row < this.gameBoard.getGrid().get(col).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col - 1).get(row) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_2 && col - 1 >=0 && row < this.gameGrid.getGrid().get(col).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col - 1).get(row) ){
             numContinueB += 1;
             col -= 1;
         }
         col = lastCol;
-        while (this.currentPlayer.getId() == 1 && col + 1 < this.gameBoard.getGrid().size() && row < this.gameBoard.getGrid().get(col).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col + 1).get(row) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_2 && col + 1 < this.gameGrid.getGrid().size() && row < this.gameGrid.getGrid().get(col).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col + 1).get(row) ){
             numContinueB += 1;
             col += 1;
         }
@@ -117,12 +115,12 @@ public class Game {
         numContinueR = 1;
         numContinueB = 1;
         // check player1 for col condition
-        while (this.currentPlayer.getId() == 0 && row - 1 >=0 && this.gameBoard.getGrid().get(lastCol).get(row) == this.gameBoard.getGrid().get(lastCol).get(row - 1) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_1 && row - 1 >=0 && this.gameGrid.getGrid().get(lastCol).get(row) == this.gameGrid.getGrid().get(lastCol).get(row - 1) ){
             numContinueR += 1;
             row -= 1;
         }
         //check player2 for row condition
-        while (this.currentPlayer.getId() == 1 && row - 1 >=0 && this.gameBoard.getGrid().get(lastCol).get(row) == this.gameBoard.getGrid().get(lastCol).get(row - 1) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_2 && row - 1 >=0 && this.gameGrid.getGrid().get(lastCol).get(row) == this.gameGrid.getGrid().get(lastCol).get(row - 1) ){
             numContinueB += 1;
             row -= 1;
         }
@@ -136,34 +134,34 @@ public class Game {
         numContinueB = 1;
 
         // check player1 for diagonal condition
-        while (this.currentPlayer.getId() == 0 && col - 1 >=0
-                && row < this.gameBoard.getGrid().get(col).size() && row-1 < this.gameBoard.getGrid().get(col-1).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col - 1).get(row-1) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_1 && col - 1 >=0
+                && row < this.gameGrid.getGrid().get(col).size() && row-1 < this.gameGrid.getGrid().get(col-1).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col - 1).get(row-1) ){
             numContinueB += 1;
             col -= 1;
             row -= 1;
         }
 
-        while (this.currentPlayer.getId() == 0 && col + 1 < this.gameBoard.getGrid().size()
-                && row < this.gameBoard.getGrid().get(col).size() && row+1 < this.gameBoard.getGrid().get(col+1).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col + 1).get(row+1) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_1 && col + 1 < this.gameGrid.getGrid().size()
+                && row < this.gameGrid.getGrid().get(col).size() && row+1 < this.gameGrid.getGrid().get(col+1).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col + 1).get(row+1) ){
             numContinueB += 1;
             col += 1;
             row += 1;
         }
 
         // check player2 for diagonal condition
-        while (this.currentPlayer.getId() == 1 && col - 1 >=0
-                && row < this.gameBoard.getGrid().get(col).size() && row-1 < this.gameBoard.getGrid().get(col-1).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col - 1).get(row-1) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_2 && col - 1 >=0
+                && row < this.gameGrid.getGrid().get(col).size() && row-1 < this.gameGrid.getGrid().get(col-1).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col - 1).get(row-1) ){
             numContinueB += 1;
             col -= 1;
             row -= 1;
         }
 
-        while (this.currentPlayer.getId() == 1 && col + 1 < this.gameBoard.getGrid().size()
-                && row < this.gameBoard.getGrid().get(col).size() && row+1 < this.gameBoard.getGrid().get(col+1).size()
-                && this.gameBoard.getGrid().get(col).get(row) == this.gameBoard.getGrid().get(col + 1).get(row+1) ){
+        while (this.currentPlayer.getId() == PlayerID.PLAYER_2 && col + 1 < this.gameGrid.getGrid().size()
+                && row < this.gameGrid.getGrid().get(col).size() && row+1 < this.gameGrid.getGrid().get(col+1).size()
+                && this.gameGrid.getGrid().get(col).get(row) == this.gameGrid.getGrid().get(col + 1).get(row+1) ){
             numContinueB += 1;
             col += 1;
             row += 1;
@@ -181,10 +179,10 @@ public class Game {
 
         //case 3: tie, return 3
         int totalOccupiedGrid = 0;
-        for (List<Character> c : this.gameBoard.getGrid()){
+        for (List<Character> c : this.gameGrid.getGrid()){
             totalOccupiedGrid += c.size();
         }
-        if (totalOccupiedGrid == this.gameBoard.getHeight() * this.gameBoard.getWidth()){
+        if (totalOccupiedGrid == this.gameGrid.getHeight() * this.gameGrid.getWidth()){
             return GameStatus.TIE;
         }
 

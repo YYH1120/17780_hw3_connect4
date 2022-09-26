@@ -1,15 +1,16 @@
 package org.game.connect4.util;
 
 public enum PlayerID {
-//    PLAYER_ID0(0),PLAYER_ID1(1);
-//
-//    final int value;
-//
-//    PlayerID(int value){
-//        this.value = value;
-//    }
+    PLAYER_1(1),
+    PLAYER_2(2);
 
-    NONE,
-    PLAYER0,
-    PLAYER1
+    private final int id;
+
+    private PlayerID(int id){
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
