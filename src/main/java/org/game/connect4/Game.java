@@ -1,6 +1,7 @@
 package org.game.connect4;
 
 import org.game.connect4.util.GameStatus;
+import org.game.connect4.util.TokenColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,6 @@ public class Game {
     private final int gameMode;  // 0:pvp, 1:pvc, 2:cvc
     private final List<Player> playerList = new ArrayList<>();
     private Player currentPlayer;
-    private int lastCol; // the column index of last movement
 
     public Game (int gameMode, String name1, String name2){
         this.gameMode = gameMode;
@@ -41,7 +41,6 @@ public class Game {
         this.currentPlayer = this.playerList.get(0);
     }
 
-
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -50,10 +49,25 @@ public class Game {
         return currentPlayer;
     }
 
+    public GameStatus playMove(int column) {
+        if(!isValidMove(column))
+            throw new RuntimeException("Invalid Move"); //TODO: throw exception
+
+        this.gameBoard.getGrid().get(column).add(this.getCurrentTokenColor().symbol);
+        return this.CheckWin(column);
+    }
+
+    public boolean isValidMove(int column) {
+        return column >= 0 && this.gameBoard.getGrid().get(column).size() < this.gameBoard.getHeight();
+    }
+
+    private TokenColor getCurrentTokenColor() {
+        return this.currentPlayer.getId() == 0 ? TokenColor.RED : TokenColor.BLUE;
+    }
+
     // 0： game continue, 1: player1 won, 2: player2 won, 3: tie
     // after checkWin, we change the current player
-    public GameStatus CheckWin(){
-        int lastCol = this.lastCol;
+    public GameStatus CheckWin(int lastCol){
         int lastRow = this.gameBoard.getGrid().get(lastCol).size()-1;
         int maxContinueR = 1;
         int maxContinueB = 1;
