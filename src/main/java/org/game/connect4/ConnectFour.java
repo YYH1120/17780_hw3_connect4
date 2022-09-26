@@ -65,79 +65,27 @@ public class ConnectFour {
 
     public GameStatus checkWin(int lastCol){
         int lastRow = getGameGrid().getGrid().get(lastCol).size()-1;
-        int row,col;
         Character currColor = getCurrentPlayer().tokenColor().getSymbol();
 
         HashMap<Character,Integer> maxContinue = new HashMap<>();
         maxContinue.put(TokenColor.RED.getSymbol(),1);
         maxContinue.put(TokenColor.BLUE.getSymbol(),1);
-        HashMap<Character,Integer> currContinue = new HashMap<>();
-        currContinue.put(TokenColor.RED.getSymbol(),1);
-        currContinue.put(TokenColor.BLUE.getSymbol(),1);
 
         // Check Row
-        row = lastRow;
-        col = lastCol;
-        while (row - 1 >= 0 && currColor == getGameGrid().getGrid().get(col).get(row-1)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            row -= 1;
-        }
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),currContinue.get(currColor)));
+        int resCheckRow = checkRow(lastRow,lastCol,currColor);
+        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckRow));
 
         // Check Column
-        col = lastCol;
-        currContinue.put(TokenColor.RED.getSymbol(),1);
-        currContinue.put(TokenColor.BLUE.getSymbol(),1);
-        while (col - 1>=0 && row<getGameGrid().getGrid().get(col - 1).size() && currColor == getGameGrid().getGrid().get(col - 1).get(row)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            col -= 1;
-        }
-        col = lastCol;
-        while (col + 1<getGameGrid().getWidth() && row<getGameGrid().getGrid().get(col + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            col += 1;
-        }
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),currContinue.get(currColor)));
+        int resCheckCol = checkCol(lastRow,lastCol,currColor);
+        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckCol));
 
         // Check Right Diagonal
-        row = lastRow;
-        col = lastCol;
-        currContinue.put(TokenColor.RED.getSymbol(),1);
-        currContinue.put(TokenColor.BLUE.getSymbol(),1);
-        while (col - 1>=0 && row-1>=0 && row - 1<getGameGrid().getGrid().get(col - 1).size() && currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            col -= 1;
-            row -= 1;
-        }
-        row = lastRow;
-        col = lastCol;
-        while (col + 1<getGameGrid().getWidth() && row + 1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col + 1).size()
-                && currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            col += 1;
-            row += 1;
-        }
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),currContinue.get(currColor)));
+        int resCheckRightDiagonal = checkRightDiagonal(lastRow,lastCol,currColor);
+        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckRightDiagonal));
 
         // Check Left Diagonal
-        row = lastRow;
-        col = lastCol;
-        currContinue.put(TokenColor.RED.getSymbol(),1);
-        currContinue.put(TokenColor.BLUE.getSymbol(),1);
-        while (col + 1<getGameGrid().getWidth() && row-1>=0 && row - 1<getGameGrid().getGrid().get(col + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row - 1)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            col += 1;
-            row -= 1;
-        }
-        row = lastRow;
-        col = lastCol;
-        while (col -1>=0 && row +1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col - 1).size()
-                && currColor == getGameGrid().getGrid().get(col - 1).get(row + 1)){
-            currContinue.put(currColor,currContinue.get(currColor)+1);
-            col -= 1;
-            row += 1;
-        }
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),currContinue.get(currColor)));
+        int resCheckLeftDiagonal = checkLeftDiagonal(lastRow,lastCol,currColor);
+        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckLeftDiagonal));
 
         //case 1: Player1 Win
         if (maxContinue.get(getPlayer1().tokenColor().getSymbol()) >=4){
@@ -160,6 +108,70 @@ public class ConnectFour {
 
         // case 4: Game Continue
         return GameStatus.CONTINUE;
+    }
+
+    private int checkRow (int row, int col, Character currColor){
+        int maxContinueNum = 1;
+        while (row - 1 >= 0 && currColor == getGameGrid().getGrid().get(col).get(row-1)){
+            maxContinueNum += 1;
+            row -= 1;
+        }
+        return maxContinueNum;
+    }
+
+    private int checkCol (int row, int col, Character currColor){
+        int maxContinueNum = 1;
+        int tempCol = col;
+        while (col - 1>=0 && row<getGameGrid().getGrid().get(col - 1).size() && currColor == getGameGrid().getGrid().get(col - 1).get(row)){
+            maxContinueNum += 1;
+            col -= 1;
+        }
+        col = tempCol;
+        while (col + 1<getGameGrid().getWidth() && row<getGameGrid().getGrid().get(tempCol + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row)){
+            maxContinueNum += 1;
+            col += 1;
+        }
+        return maxContinueNum;
+    }
+
+    private int checkRightDiagonal (int row, int col, Character currColor){
+        int maxContinueNum = 1;
+        int tempRow = row;
+        int tempCol = col;
+        while (col - 1>=0 && row-1>=0 && row - 1<getGameGrid().getGrid().get(col - 1).size() && currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
+            maxContinueNum += 1;
+            col -= 1;
+            row -= 1;
+        }
+        row = tempRow;
+        col = tempCol;
+        while (col + 1<getGameGrid().getWidth() && row + 1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col + 1).size()
+                && currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
+            maxContinueNum += 1;
+            col += 1;
+            row += 1;
+        }
+        return maxContinueNum;
+    }
+
+    private int checkLeftDiagonal (int row, int col, Character currColor){
+        int maxContinueNum = 1;
+        int tempRow = row;
+        int tempCol = col;
+        while (col + 1<getGameGrid().getWidth() && row-1>=0 && row - 1<getGameGrid().getGrid().get(col + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row - 1)){
+            maxContinueNum += 1;
+            col += 1;
+            row -= 1;
+        }
+        row = tempRow;
+        col = tempCol;
+        while (col -1>=0 && row +1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col - 1).size()
+                && currColor == getGameGrid().getGrid().get(col - 1).get(row + 1)){
+            maxContinueNum += 1;
+            col -= 1;
+            row += 1;
+        }
+        return maxContinueNum;
     }
 
 }
