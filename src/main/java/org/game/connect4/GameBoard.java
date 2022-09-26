@@ -37,4 +37,12 @@ public class GameBoard {
     public List<List<Character>> getGrid() {
         return grid;
     }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 }
