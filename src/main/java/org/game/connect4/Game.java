@@ -1,5 +1,6 @@
 package org.game.connect4;
 
+import org.game.connect4.exception.InvalidMoveException;
 import org.game.connect4.util.GameStatus;
 import org.game.connect4.util.TokenColor;
 
@@ -51,7 +52,7 @@ public class Game {
 
     public GameStatus playMove(int column) {
         if(!isValidMove(column))
-            throw new RuntimeException("Invalid Move"); //TODO: throw exception
+            throw new InvalidMoveException();
 
         this.gameBoard.getGrid().get(column).add(this.getCurrentTokenColor().symbol);
         return this.CheckWin(column);
