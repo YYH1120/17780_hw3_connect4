@@ -45,4 +45,17 @@ public class GameBoard {
     public int getWidth() {
         return width;
     }
+
+    public void displayGrid() {
+        int i,j;
+        for (i = this.height-1; i >= 0; i--) {
+            for (j = 0; j < this.width; j++) {
+                if (i > this.grid.get(j).size()-1)
+                    System.out.print(".\t");
+                else
+                    System.out.print(this.grid.get(j).get(i) + "\t");
+            }
+            System.out.println();
+        }
+    }
 }
