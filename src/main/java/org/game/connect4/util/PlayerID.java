@@ -6,7 +6,7 @@ public enum PlayerID {
 
     private final int id;
 
-    private PlayerID(int id){
+    PlayerID(int id){
         this.id = id;
     }
 

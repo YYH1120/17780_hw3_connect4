@@ -6,18 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameGrid {
-    private int height;
-    private int width;
-    private List<List<Character>> grid = new ArrayList<>();
-
-    public GameGrid() {
-        this.height = GameConstants.DEFAULT_HEIGHT;
-        this.width = GameConstants.DEFAULT_WIDTH;
-        for (int i = 0; i < this.width; i++){
-            List<Character> tmp = new ArrayList<>();
-            grid.add(tmp);
-        }
-    }
+    private final int height;
+    private final int width;
+    private final List<List<Character>> grid = new ArrayList<>();
 
     public GameGrid(int height, int width) {
         this.height = height;

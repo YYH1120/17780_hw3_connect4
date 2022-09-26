@@ -6,7 +6,7 @@ public enum TokenColor {
 
     private final Character symbol;
 
-    private TokenColor(Character symbol) {
+    TokenColor(Character symbol) {
         this.symbol = symbol;
     }
 

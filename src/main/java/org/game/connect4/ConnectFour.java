@@ -1,7 +1,6 @@
 package org.game.connect4;
 
 import org.game.connect4.exception.InvalidMoveException;
-import org.game.connect4.exception.NoMovesAvailable;
 import org.game.connect4.util.*;
 
 import java.util.HashMap;
@@ -46,37 +45,28 @@ public class ConnectFour {
         return player2;
     }
 
-    public GameStatus playMove(int column) {
-        if(!isValidMove(column))
-            throw new InvalidMoveException();
-
-        getGameGrid().getGrid().get(column).add(getCurrentPlayer().getTokenColor().getSymbol());
-        switchPlayer();
-        getGameGrid().displayGrid();
-        return checkWin(column);
-    }
-
-    public int getNextMove() {
-        int i;
-        for (i = 0; i < getGameGrid().getWidth(); i++) {
-            if(getGameGrid().getGrid().get(i).size() < getGameGrid().getHeight())
-                return i;
-        }
-        throw new NoMovesAvailable();
-    }
-
     public boolean isValidMove(int column) {
         return column >= 0 && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
     }
 
-    public void switchPlayer() {
+    private void switchPlayer() {
         setCurrentPlayer(getCurrentPlayer() == getPlayer1() ? getPlayer2() : getPlayer1());
+    }
+
+    public GameStatus playMove(int column) {
+        if(!isValidMove(column))
+            throw new InvalidMoveException();
+
+        getGameGrid().getGrid().get(column).add(getCurrentPlayer().tokenColor().getSymbol());
+        getGameGrid().displayGrid();
+        switchPlayer();
+        return checkWin(column);
     }
 
     public GameStatus checkWin(int lastCol){
         int lastRow = getGameGrid().getGrid().get(lastCol).size()-1;
         int row,col;
-        Character currColor = getCurrentPlayer().getTokenColor().getSymbol();
+        Character currColor = getCurrentPlayer().tokenColor().getSymbol();
 
         HashMap<Character,Integer> maxContinue = new HashMap<>();
         maxContinue.put(TokenColor.RED.getSymbol(),1);
@@ -150,12 +140,12 @@ public class ConnectFour {
         maxContinue.put(currColor, Math.max(maxContinue.get(currColor),currContinue.get(currColor)));
 
         //case 1: Player1 Win
-        if (maxContinue.get(getPlayer1().getTokenColor().getSymbol()) >=4){
+        if (maxContinue.get(getPlayer1().tokenColor().getSymbol()) >=4){
             return GameStatus.PLAYER_1_WINS;
         }
 
         //case 2: Player2 Win
-        if (maxContinue.get(getPlayer2().getTokenColor().getSymbol()) >= 4){
+        if (maxContinue.get(getPlayer2().tokenColor().getSymbol()) >= 4){
             return GameStatus.PLAYER_2_WINS;
         }
 
