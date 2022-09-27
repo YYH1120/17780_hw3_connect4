@@ -18,11 +18,11 @@ public class ConnectFourInitializer {
      * @param name2 - Name of the second player
      * @return an instance of ConnectFourGame initialized with the given values
      */
-    public ConnectFourGameImpl initializeDefaultPlayerVsPlayer(String name1, String name2) {
+    public ConnectFourGame initializeDefaultPlayerVsPlayer(String name1, String name2) {
         GameGrid gameGrid = new GameGrid(GameConstants.DEFAULT_HEIGHT, GameConstants.DEFAULT_WIDTH);
         Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, name2, false, TokenColor.BLUE);
-        return new ConnectFourGameImpl(gameGrid, GameMode.PLAYER_VS_PLAYER, player1, player2);
+        return new ConnectFourGame(gameGrid, GameMode.PLAYER_VS_PLAYER, player1, player2);
     }
 
     /**
@@ -33,11 +33,11 @@ public class ConnectFourInitializer {
      * @param name2 - Name of the second player
      * @return an instance of ConnectFourGame initialized with the input values
      */
-    public ConnectFourGameImpl initializePlayerVsPlayer(int height, int width, String name1, String name2) {
+    public ConnectFourGame initializePlayerVsPlayer(int height, int width, String name1, String name2) {
         GameGrid gameGrid = new GameGrid(height, width);
         Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, name2, false, TokenColor.BLUE);
-        return new ConnectFourGameImpl(gameGrid, GameMode.PLAYER_VS_PLAYER, player1, player2);
+        return new ConnectFourGame(gameGrid, GameMode.PLAYER_VS_PLAYER, player1, player2);
     }
 
     /**
@@ -45,11 +45,11 @@ public class ConnectFourInitializer {
      * @param name1 - Name of the human player
      * @return an instance of ConnectFourGame initialized with the given values
      */
-    public ConnectFourGameImpl initializeDefaultPlayerVsComputer(String name1) {
+    public ConnectFourGame initializeDefaultPlayerVsComputer(String name1) {
         GameGrid gameGrid = new GameGrid(GameConstants.DEFAULT_HEIGHT, GameConstants.DEFAULT_WIDTH);
         Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.BLUE);
-        return new ConnectFourGameImpl(gameGrid, GameMode.PLAYER_VS_COMPUTER, player1, player2);
+        return new ConnectFourGame(gameGrid, GameMode.PLAYER_VS_COMPUTER, player1, player2);
     }
 
     /**
@@ -59,22 +59,22 @@ public class ConnectFourInitializer {
      * @param name1 - Name of the human player
      * @return an instance of ConnectFourGame initialized with the input values
      */
-    public ConnectFourGameImpl initializePlayerVsComputer(int height, int width, String name1) {
+    public ConnectFourGame initializePlayerVsComputer(int height, int width, String name1) {
         GameGrid gameGrid = new GameGrid(height, width);
         Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.BLUE);
-        return new ConnectFourGameImpl(gameGrid, GameMode.PLAYER_VS_COMPUTER, player1, player2);
+        return new ConnectFourGame(gameGrid, GameMode.PLAYER_VS_COMPUTER, player1, player2);
     }
 
     /**
      * Constructs a new ConnectFourGame for Computer Vs Computer mode with default settings of grid dimensions
      * @return an instance of ConnectFourGame initialized with the default values
      */
-    public ConnectFourGameImpl initializeDefaultComputerVsComputer() {
+    public ConnectFourGame initializeDefaultComputerVsComputer() {
         GameGrid gameGrid = new GameGrid(GameConstants.DEFAULT_HEIGHT, GameConstants.DEFAULT_WIDTH);
         Player player1 = new Player(PlayerID.PLAYER_1, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER2, true, TokenColor.BLUE);
-        return new ConnectFourGameImpl(gameGrid, GameMode.COMPUTER_VS_COMPUTER, player1, player2);
+        return new ConnectFourGame(gameGrid, GameMode.COMPUTER_VS_COMPUTER, player1, player2);
     }
 
     /**
@@ -83,10 +83,10 @@ public class ConnectFourInitializer {
      * @param width - Width of the grid
      * @return an instance of ConnectFourGame initialized with the input values
      */
-    public ConnectFourGameImpl initializeComputerVsComputer(int height, int width) {
+    public ConnectFourGame initializeComputerVsComputer(int height, int width) {
         GameGrid gameGrid = new GameGrid(height, width);
         Player player1 = new Player(PlayerID.PLAYER_1, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER2, true, TokenColor.BLUE);
-        return new ConnectFourGameImpl(gameGrid, GameMode.COMPUTER_VS_COMPUTER, player1, player2);
+        return new ConnectFourGame(gameGrid, GameMode.COMPUTER_VS_COMPUTER, player1, player2);
     }
 }
