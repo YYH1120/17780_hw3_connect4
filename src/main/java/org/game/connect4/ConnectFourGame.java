@@ -6,14 +6,21 @@ import org.game.connect4.util.*;
 import java.util.HashMap;
 import java.util.List;
 
-public class ConnectFour {
+public class ConnectFourGame implements ConnectFourFunction{
     private final GameGrid gameGrid;
     private final GameMode gameMode;
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
 
-    public ConnectFour(GameGrid gameGrid, GameMode gameMode, Player player1, Player player2) {
+    /**
+     * Constructs a ConnectFour game with gameGrid, gameMode, player1 and player2.
+     * @param gameGrid the board of the game
+     * @param gameMode one of the game modes: player to player, player to computer and computer to computer
+     * @param player1 the first player
+     * @param player2 the second player
+     */
+    public ConnectFourGame(GameGrid gameGrid, GameMode gameMode, Player player1, Player player2){
         this.gameGrid = gameGrid;
         this.gameMode = gameMode;
         this.player1 = player1;
@@ -21,48 +28,86 @@ public class ConnectFour {
         this.currentPlayer = player1;
     }
 
+    /**
+     * Set the current player.
+     * @param currentPlayer player of the current turn to set
+     */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * Get the current player.
+     * @return the player of the current turn
+     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     * Get the gameGrid.
+     * @return the gameGrid of the game
+     */
     public GameGrid getGameGrid() {
         return gameGrid;
     }
 
+    /**
+     * Get the gameMode.
+     * @return the gameMode of the game
+     */
     public GameMode getGameMode() {
         return gameMode;
     }
 
+    /**
+     * Get the first player.
+     * @return the first player
+     */
     public Player getPlayer1() {
         return player1;
     }
 
+    /**
+     * Get the second player.
+     * @return the second player
+     */
     public Player getPlayer2() {
         return player2;
     }
 
+    /**
+     * Check whether the movement is valid.
+     * @param column the index of the column that the player want to put the checker
+     * @return True for the valid movement and False for the invalid movement.
+     */
     public boolean isValidMove(int column) {
-        return column >= 0 && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
+        return column >= 0 && column < getGameGrid().getWidth() && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
     }
 
-    private void switchPlayer() {
+    /**
+     * Switching the current player's turn into the other player's turn.
+     */
+    public void switchPlayer() {
         setCurrentPlayer(getCurrentPlayer() == getPlayer1() ? getPlayer2() : getPlayer1());
     }
 
-    public GameStatus playMove(int column) {
+    /**
+     * Drop the checker into the grid according to the player's movement.
+     * @param column the index of the column that the current playe want to put a checker
+     */
+    public void playMove(int column) {
         if(!isValidMove(column))
             throw new InvalidMoveException();
 
         getGameGrid().getGrid().get(column).add(getCurrentPlayer().tokenColor().getSymbol());
-        getGameGrid().displayGrid();
-        switchPlayer();
-        return checkWin(column);
     }
 
+    /**
+     * Check if the game is over and if there is a winner.
+     * @param lastCol the index number of column that checker placed by the player who performed the last turn
+     * @return the status of the Game from GameStatus
+     */
     public GameStatus checkWin(int lastCol){
         int lastRow = getGameGrid().getGrid().get(lastCol).size()-1;
         Character currColor = getCurrentPlayer().tokenColor().getSymbol();
@@ -110,6 +155,13 @@ public class ConnectFour {
         return GameStatus.CONTINUE;
     }
 
+    /**
+     * Check if there are four consecutive checkers of the same color in row.
+     * @param row the index number of row that checker placed by the player who performed the last turn
+     * @param col the index number of column that checker placed by the player who performed the last turn
+     * @param currColor the color of the checker placed by the player who performed the last turn
+     * @return the maximum number of consecutive checkers in row
+     */
     private int checkRow (int row, int col, Character currColor){
         int maxContinueNum = 1;
         while (row - 1 >= 0 && currColor == getGameGrid().getGrid().get(col).get(row-1)){
@@ -119,6 +171,13 @@ public class ConnectFour {
         return maxContinueNum;
     }
 
+    /**
+     * Check if there are four consecutive checkers of the same color in column.
+     * @param row the index number of row that checker placed by the player who performed the last turn
+     * @param col the index number of column that checker placed by the player who performed the last turn
+     * @param currColor the color of the checker placed by the player who performed the last turn
+     * @return the maximum number of consecutive checkers in column
+     */
     private int checkCol (int row, int col, Character currColor){
         int maxContinueNum = 1;
         int tempCol = col;
@@ -127,13 +186,20 @@ public class ConnectFour {
             col -= 1;
         }
         col = tempCol;
-        while (col + 1<getGameGrid().getWidth() && row<getGameGrid().getGrid().get(tempCol + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row)){
+        while (col + 1<getGameGrid().getWidth() && row<getGameGrid().getGrid().get(col + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row)){
             maxContinueNum += 1;
             col += 1;
         }
         return maxContinueNum;
     }
 
+    /**
+     * Check if there are four consecutive checkers of the same color in right diagonal.
+     * @param row the index number of row that checker placed by the player who performed the last turn
+     * @param col the index number of column that checker placed by the player who performed the last turn
+     * @param currColor the color of the checker placed by the player who performed the last turn
+     * @return the maximum number of consecutive checkers in column in right diagonal
+     */
     private int checkRightDiagonal (int row, int col, Character currColor){
         int maxContinueNum = 1;
         int tempRow = row;
@@ -146,7 +212,7 @@ public class ConnectFour {
         row = tempRow;
         col = tempCol;
         while (col + 1<getGameGrid().getWidth() && row + 1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col + 1).size()
-                && currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
+                && currColor == getGameGrid().getGrid().get(col + 1).get(row + 1)){
             maxContinueNum += 1;
             col += 1;
             row += 1;
@@ -154,6 +220,13 @@ public class ConnectFour {
         return maxContinueNum;
     }
 
+    /**
+     * Check if there are four consecutive checkers of the same color in left diagonal.
+     * @param row the index number of row that checker placed by the player who performed the last turn
+     * @param col the index number of column that checker placed by the player who performed the last turn
+     * @param currColor the color of the checker placed by the player who performed the last turn
+     * @return the maximum number of consecutive checkers in column in left diagonal
+     */
     private int checkLeftDiagonal (int row, int col, Character currColor){
         int maxContinueNum = 1;
         int tempRow = row;
