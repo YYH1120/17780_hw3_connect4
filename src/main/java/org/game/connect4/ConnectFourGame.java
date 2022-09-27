@@ -10,28 +10,34 @@ import java.util.List;
  * ConnectFourGame contains the main logic of the ConnectFour game and all the implementation of functions to play the game.
  * It provides the function of playing a move, switching players as well as checking game status.
  * It initializes with the game grid, game mode, the names of the players and the current player as well.
- *
+ * <br />
  * Example Code -
- * ConnectFourGame game = initializer.initializeDefaultPlayerVsPlayer(player1Name, player2Name);
- *  while (true){
- *  System.out.println(game.getCurrentPlayer().name() + " please input the column index (from 1 to "+ (game.getGameGrid().getWidth()) + ") you want to put a checker: ");
- *  int colIndex = input.nextInt() - 1;
- *  game.playMove(colIndex);
- *  game.getGameGrid().displayGrid();
- *  gameStatus = game.checkGameStatus(colIndex);
- *  if(gameStatus != GameStatus.CONTINUE)
- *      break;
- *  game.switchPlayer();
- *  }
- *  if (gameStatus == GameStatus.PLAYER_1_WINS){
- *     System.out.println("Congrats! " + game.getPlayer1().name() + " has won the game!");
- *  }
- *  else if (gameStatus == GameStatus.PLAYER_2_WINS){
- *     System.out.println("Congrats! " + game.getPlayer2().name() + " has won the game!");
- *  }
- *  else{
- *      System.out.println("Game Tied!");
- * }
+ * <pre>
+ *     {@code
+ *     ConnectFourInitializer initializer = new ConnectFourInitializer();
+ *     ConnectFourGame game = initializer.initializeDefaultPlayerVsPlayer(player1Name, player2Name);
+ *     while (true){
+ *             System.out.println(game.getCurrentPlayer().name() + " please input the column index (from 1 to "+ (game.getGameGrid().getWidth()) + ") you want to put a checker: ");
+ *             int colIndex = input.nextInt() - 1;
+ *             game.playMove(colIndex);
+ *             game.getGameGrid().displayGrid();
+ *             gameStatus = game.checkGameStatus(colIndex);
+ *             if(gameStatus != GameStatus.CONTINUE)
+ *                 break;
+ *             game.switchPlayer();
+ *         }
+ *         if (gameStatus == GameStatus.PLAYER_1_WINS){
+ *             System.out.println("Congrats! " + game.getPlayer1().name() + " has won the game!");
+ *         }
+ *         else if (gameStatus == GameStatus.PLAYER_2_WINS){
+ *             System.out.println("Congrats! " + game.getPlayer2().name() + " has won the game!");
+ *         }
+ *         else {
+ *             System.out.println("Game Tied!");
+ *         }
+ *
+ *     }
+ * </pre>
  */
 public class ConnectFourGame {
     private final GameGrid gameGrid;

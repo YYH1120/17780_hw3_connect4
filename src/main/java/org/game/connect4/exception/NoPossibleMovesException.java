@@ -15,7 +15,7 @@ public class NoPossibleMovesException extends RuntimeException {
     /**
      * Constructs an NoPossibleMovesException with the specified detail message.
      * A detail message is a String that describes this particular exception.
-     * @param message - the detail message.
+     * @param message the detail message.
      */
     public NoPossibleMovesException(String message) {
         super(message);

@@ -14,8 +14,8 @@ public class ConnectFourInitializer {
 
     /**
      * Constructs a new ConnectFourGame for Player Vs Player mode with default settings of token color and grid dimensions
-     * @param name1 - Name of the first player
-     * @param name2 - Name of the second player
+     * @param name1 Name of the first player
+     * @param name2 Name of the second player
      * @return an instance of ConnectFourGame initialized with the given values
      */
     public ConnectFourGame initializeDefaultPlayerVsPlayer(String name1, String name2) {
@@ -27,10 +27,10 @@ public class ConnectFourInitializer {
 
     /**
      * Constructs a new ConnectFourGame for Player Vs Player mode with custom grid dimensions
-     * @param height - Height of the grid
-     * @param width - Width of the grid
-     * @param name1 - Name of the first player
-     * @param name2 - Name of the second player
+     * @param height Height of the grid
+     * @param width Width of the grid
+     * @param name1 Name of the first player
+     * @param name2 Name of the second player
      * @return an instance of ConnectFourGame initialized with the input values
      */
     public ConnectFourGame initializePlayerVsPlayer(int height, int width, String name1, String name2) {
@@ -42,7 +42,7 @@ public class ConnectFourInitializer {
 
     /**
      * Constructs a new ConnectFourGame for Player Vs Computer mode with default settings of grid dimensions
-     * @param name1 - Name of the human player
+     * @param name1 Name of the human player
      * @return an instance of ConnectFourGame initialized with the given values
      */
     public ConnectFourGame initializeDefaultPlayerVsComputer(String name1) {
@@ -54,9 +54,9 @@ public class ConnectFourInitializer {
 
     /**
      * Constructs a new ConnectFourGame for Player Vs Computer mode with custom grid dimensions
-     * @param height - Height of the grid
-     * @param width - Width of the grid
-     * @param name1 - Name of the human player
+     * @param height Height of the grid
+     * @param width Width of the grid
+     * @param name1 Name of the human player
      * @return an instance of ConnectFourGame initialized with the input values
      */
     public ConnectFourGame initializePlayerVsComputer(int height, int width, String name1) {
@@ -79,8 +79,8 @@ public class ConnectFourInitializer {
 
     /**
      * Constructs a new ConnectFourGame for Computer Vs Computer mode with custom grid dimensions
-     * @param height - Height of the grid
-     * @param width - Width of the grid
+     * @param height Height of the grid
+     * @param width Width of the grid
      * @return an instance of ConnectFourGame initialized with the input values
      */
     public ConnectFourGame initializeComputerVsComputer(int height, int width) {

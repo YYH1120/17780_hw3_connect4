@@ -24,8 +24,8 @@ public class GameGrid {
 
     /**
      * Constructs a game grid with the specified height and width
-     * @param height - the height of the grid
-     * @param width - the width of the grid
+     * @param height the height of the grid
+     * @param width the width of the grid
      */
     public GameGrid(int height, int width) {
         this.height = height;
