@@ -4,12 +4,46 @@ import org.game.connect4.util.PlayerID;
 import org.game.connect4.util.TokenColor;
 
 /**
- * A record to store a player's details
- * @param id indicates whether a player is player 1 or 2
- * @param name save the name of a player
- * @param isComputer indicates whether a player is a computer or human. True represents computer, False represents human
- * @param tokenColor saves the token color for a player
+ * Player class is used to store a player's details
  */
-public record Player(PlayerID id, String name, boolean isComputer,
-                     TokenColor tokenColor) {
+public class Player {
+    /**
+     * Indicates whether a player is player 1 or 2
+     */
+    PlayerID id;
+    /**
+     * Stores the name of a player
+     */
+    String name;
+    /**
+     * Indicates whether a player is a computer or human. True represents computer, False represents human
+     */
+    boolean isComputer;
+    /**
+     * Saves the token color for a player
+     */
+    TokenColor tokenColor;
+
+    public Player(PlayerID id, String name, boolean isComputer, TokenColor tokenColor) {
+        this.id = id;
+        this.name = name;
+        this.isComputer = isComputer;
+        this.tokenColor = tokenColor;
+    }
+
+    public PlayerID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isComputer() {
+        return isComputer;
+    }
+
+    public TokenColor getTokenColor() {
+        return tokenColor;
+    }
 }

@@ -133,7 +133,7 @@ public class ConnectFourGame {
         if(!isValidMove(column))
             throw new IllegalMoveException();
 
-        getGameGrid().getGrid().get(column).add(getCurrentPlayer().tokenColor().getSymbol());
+        getGameGrid().getGrid().get(column).add(getCurrentPlayer().getTokenColor().getSymbol());
     }
 
     /**
@@ -143,7 +143,7 @@ public class ConnectFourGame {
      */
     public GameStatus checkGameStatus(int lastCol){
         int lastRow = getGameGrid().getGrid().get(lastCol).size()-1;
-        Character currColor = getCurrentPlayer().tokenColor().getSymbol();
+        Character currColor = getCurrentPlayer().getTokenColor().getSymbol();
 
         HashMap<Character,Integer> maxContinue = new HashMap<>();
         maxContinue.put(TokenColor.RED.getSymbol(),1);
@@ -166,12 +166,12 @@ public class ConnectFourGame {
         maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckLeftDiagonal));
 
         //case 1: Player1 Win
-        if (maxContinue.get(getPlayer1().tokenColor().getSymbol()) >=4){
+        if (maxContinue.get(getPlayer1().getTokenColor().getSymbol()) >=4){
             return GameStatus.PLAYER_1_WINS;
         }
 
         //case 2: Player2 Win
-        if (maxContinue.get(getPlayer2().tokenColor().getSymbol()) >= 4){
+        if (maxContinue.get(getPlayer2().getTokenColor().getSymbol()) >= 4){
             return GameStatus.PLAYER_2_WINS;
         }
 
