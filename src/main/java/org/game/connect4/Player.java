@@ -31,18 +31,34 @@ public class Player {
         this.tokenColor = tokenColor;
     }
 
+    /**
+     * Get the id of a player
+     * @return id of a player
+     */
     public PlayerID getId() {
         return id;
     }
 
+    /**
+     * Get the name of the player
+     * @return name of the player
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get if the player is computer not. True indicates computer, False indicates human
+     * @return if player is computer or not
+     */
     public boolean isComputer() {
         return isComputer;
     }
 
+    /**
+     * Get color of token for a player
+     * @return color of the token of a player
+     */
     public TokenColor getTokenColor() {
         return tokenColor;
     }
