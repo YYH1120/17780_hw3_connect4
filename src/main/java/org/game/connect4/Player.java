@@ -10,20 +10,27 @@ public class Player {
     /**
      * Indicates whether a player is player 1 or 2
      */
-    PlayerID id;
+    private final PlayerID id;
     /**
      * Stores the name of a player
      */
-    String name;
+    private final String name;
     /**
      * Indicates whether a player is a computer or human. True represents computer, False represents human
      */
-    boolean isComputer;
+    private final boolean isComputer;
     /**
      * Saves the token color for a player
      */
-    TokenColor tokenColor;
+    private final TokenColor tokenColor;
 
+    /**
+     * Constructs a new Player with the given input values
+     * @param id identifies if a player is player1 or player2
+     * @param name name of the player
+     * @param isComputer true if player is computer else false
+     * @param tokenColor token color for the player
+     */
     public Player(PlayerID id, String name, boolean isComputer, TokenColor tokenColor) {
         this.id = id;
         this.name = name;
