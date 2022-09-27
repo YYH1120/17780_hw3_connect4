@@ -65,13 +65,6 @@ public class GameGrid {
      * Displays the current state of the ConnectFour grid. Empty slots are represented as '.' in the output.
      * This representation is helpful while creating text-based clients for the ConnectFour Game.
      * Similar implementation can be used to display the grid in different ways.
-     * Sample Output -
-     * .	.	.	.	.	.	.
-     * .	.	.	.	.	.	.
-     * .	.	.	.	.	.	.
-     * .	.	.	.	.	.	.
-     * .	.	.	.	.	.	.
-     * R	R	.	.	B	B	.
      */
     public void displayGrid() {
         int i, j;
