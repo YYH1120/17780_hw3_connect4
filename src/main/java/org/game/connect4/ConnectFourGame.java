@@ -1,19 +1,19 @@
 package org.game.connect4;
 
-import org.game.connect4.exception.InvalidMoveException;
+import org.game.connect4.exception.IllegalMoveException;
 import org.game.connect4.util.*;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class ConnectFour {
+public class ConnectFourGame {
     private final GameGrid gameGrid;
     private final GameMode gameMode;
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
 
-    public ConnectFour(GameGrid gameGrid, GameMode gameMode, Player player1, Player player2) {
+    public ConnectFourGame(GameGrid gameGrid, GameMode gameMode, Player player1, Player player2) {
         this.gameGrid = gameGrid;
         this.gameMode = gameMode;
         this.player1 = player1;
@@ -55,7 +55,7 @@ public class ConnectFour {
 
     public GameStatus playMove(int column) {
         if(!isValidMove(column))
-            throw new InvalidMoveException();
+            throw new IllegalMoveException();
 
         getGameGrid().getGrid().get(column).add(getCurrentPlayer().tokenColor().getSymbol());
         getGameGrid().displayGrid();
