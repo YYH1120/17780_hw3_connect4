@@ -1,6 +1,6 @@
 package org.game.connect4;
 
-import org.game.connect4.exception.InvalidMoveException;
+import org.game.connect4.exception.IllegalMoveException;
 import org.game.connect4.util.*;
 
 import java.util.HashMap;
@@ -98,7 +98,7 @@ public class ConnectFourGame implements ConnectFourFunction{
      */
     public void playMove(int column) {
         if(!isValidMove(column))
-            throw new InvalidMoveException();
+            throw new IllegalMoveException();
 
         getGameGrid().getGrid().get(column).add(getCurrentPlayer().tokenColor().getSymbol());
     }
