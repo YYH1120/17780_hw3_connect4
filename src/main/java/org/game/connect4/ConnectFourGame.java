@@ -162,6 +162,7 @@ public class ConnectFourGame {
      * @return the status of the Game as one of 'CONTINUE', 'PLAYER_1_WINS', 'PLAYER_2_WINS' or 'TIE'
      */
     public GameStatus checkGameStatus(int lastCol){
+        lastCol -= 1;
         int lastRow = getGameGrid().getGrid().get(lastCol).size()-1;
         Character currColor = getCurrentPlayer().getTokenColor().getSymbol();
 
