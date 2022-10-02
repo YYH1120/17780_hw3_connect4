@@ -3,13 +3,14 @@ package org.game.connect4.exception;
 /**
  * This custom exception is thrown when invalid dimensions are used to create a the ConnectFour grid.
  */
-public class InvalidDimensionException extends RuntimeException {
+public class InvalidDimensionException extends IllegalArgumentException {
 
     /**
-     * Constructs an InvalidDimensionException with a default detail message.
+     * Constructs an InvalidDimensionException with a default detail message -
+     * "Entered width/height is invalid! The value should be >= 4."
      */
     public InvalidDimensionException() {
-        super("Entered width/height is invalid!");
+        super("Entered width/height is invalid! The value should be >= 4.");
     }
 
     /**

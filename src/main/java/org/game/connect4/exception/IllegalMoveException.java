@@ -3,10 +3,10 @@ package org.game.connect4.exception;
 /**
  * This custom exception is thrown when a player makes an illegal move in the ConnectFour grid.
  */
-public class IllegalMoveException extends RuntimeException {
+public class IllegalMoveException extends IllegalArgumentException {
 
     /**
-     * Constructs an IllegalMoveException with a default detail message.
+     * Constructs an IllegalMoveException with a default detail message - "This move is not valid!".
      */
     public IllegalMoveException() {
         super("This move is not valid!");

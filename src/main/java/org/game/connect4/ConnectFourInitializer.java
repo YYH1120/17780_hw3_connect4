@@ -1,5 +1,6 @@
 package org.game.connect4;
 
+import org.game.connect4.exception.InvalidDimensionException;
 import org.game.connect4.util.GameConstants;
 import org.game.connect4.util.GameMode;
 import org.game.connect4.util.PlayerID;
@@ -34,6 +35,7 @@ public class ConnectFourInitializer {
      * @return an instance of ConnectFourGame initialized with the input values
      */
     public ConnectFourGame initializePlayerVsPlayer(int height, int width, String name1, String name2) {
+        checkGridDimensions(height, width);
         GameGrid gameGrid = new GameGrid(height, width);
         Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, name2, false, TokenColor.BLUE);
@@ -42,12 +44,12 @@ public class ConnectFourInitializer {
 
     /**
      * Constructs a new ConnectFourGame for Player Vs Computer mode with default settings of grid dimensions
-     * @param name1 Name of the human player
+     * @param name Name of the human player
      * @return an instance of ConnectFourGame initialized with the given values
      */
-    public ConnectFourGame initializeDefaultPlayerVsComputer(String name1) {
+    public ConnectFourGame initializeDefaultPlayerVsComputer(String name) {
         GameGrid gameGrid = new GameGrid(GameConstants.DEFAULT_HEIGHT, GameConstants.DEFAULT_WIDTH);
-        Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
+        Player player1 = new Player(PlayerID.PLAYER_1, name, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.BLUE);
         return new ConnectFourGame(gameGrid, GameMode.PLAYER_VS_COMPUTER, player1, player2);
     }
@@ -60,6 +62,7 @@ public class ConnectFourInitializer {
      * @return an instance of ConnectFourGame initialized with the input values
      */
     public ConnectFourGame initializePlayerVsComputer(int height, int width, String name1) {
+        checkGridDimensions(height, width);
         GameGrid gameGrid = new GameGrid(height, width);
         Player player1 = new Player(PlayerID.PLAYER_1, name1, false, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.BLUE);
@@ -84,9 +87,19 @@ public class ConnectFourInitializer {
      * @return an instance of ConnectFourGame initialized with the input values
      */
     public ConnectFourGame initializeComputerVsComputer(int height, int width) {
+        checkGridDimensions(height, width);
         GameGrid gameGrid = new GameGrid(height, width);
         Player player1 = new Player(PlayerID.PLAYER_1, GameConstants.DEFAULT_COMPUTER1, true, TokenColor.RED);
         Player player2 = new Player(PlayerID.PLAYER_2, GameConstants.DEFAULT_COMPUTER2, true, TokenColor.BLUE);
         return new ConnectFourGame(gameGrid, GameMode.COMPUTER_VS_COMPUTER, player1, player2);
+    }
+
+    private void checkGridDimensions(int height, int width) {
+        if(height < 4 && width < 4)
+            throw new InvalidDimensionException("Entered height and width are invalid! They should be >= 4.");
+        if(height < 4)
+            throw new InvalidDimensionException("Entered height is invalid! It should be >= 4.");
+        if(width < 4)
+            throw new InvalidDimensionException("Entered width is invalid! It should be >= 4.");
     }
 }
