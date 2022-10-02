@@ -33,6 +33,7 @@ public class ConnectFourInitializer {
      * @param name1 Name of the first player
      * @param name2 Name of the second player
      * @return an instance of ConnectFourGame initialized with the input values
+     * @throws InvalidDimensionException when the grid dimensions are invalid
      */
     public ConnectFourGame initializePlayerVsPlayer(int height, int width, String name1, String name2) {
         checkGridDimensions(height, width);
@@ -60,6 +61,7 @@ public class ConnectFourInitializer {
      * @param width Width of the grid
      * @param name1 Name of the human player
      * @return an instance of ConnectFourGame initialized with the input values
+     * @throws InvalidDimensionException when the grid dimensions are invalid
      */
     public ConnectFourGame initializePlayerVsComputer(int height, int width, String name1) {
         checkGridDimensions(height, width);
@@ -85,6 +87,7 @@ public class ConnectFourInitializer {
      * @param height Height of the grid
      * @param width Width of the grid
      * @return an instance of ConnectFourGame initialized with the input values
+     * @throws InvalidDimensionException when the grid dimensions are invalid
      */
     public ConnectFourGame initializeComputerVsComputer(int height, int width) {
         checkGridDimensions(height, width);
@@ -94,6 +97,12 @@ public class ConnectFourInitializer {
         return new ConnectFourGame(gameGrid, GameMode.COMPUTER_VS_COMPUTER, player1, player2);
     }
 
+    /**
+     * Checks whether the grid dimensions are valid or not
+     * @param height Height of the grid
+     * @param width Width of the grid
+     * @throws InvalidDimensionException if the grid dimensions are invalid
+     */
     private void checkGridDimensions(int height, int width) {
         if(height < 4 && width < 4)
             throw new InvalidDimensionException("Entered height and width are invalid! They should be >= 4.");

@@ -3,6 +3,7 @@ package org.game.connect4;
 import org.game.connect4.exception.IllegalMoveException;
 import org.game.connect4.util.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -111,8 +112,8 @@ public class ConnectFourGame {
 
     /**
      * Check whether the movement is valid.
-     * @param column the index of the column that the player want to put the checker
-     * @return True for the valid movement and False for the invalid movement.
+     * @param column the column number (starting from 1) that the current player wants to put a checker in
+     * @return true for the valid movement and false for the invalid movement.
      */
     public boolean isValidMove(int column) {
         return column >= 0 && column < getGameGrid().getWidth() && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
@@ -120,20 +121,39 @@ public class ConnectFourGame {
 
     /**
      * Switching the current player's turn into the other player's turn.
+     * @return the new current player after switching
      */
-    public void switchPlayer() {
+    public Player switchPlayer() {
         setCurrentPlayer(getCurrentPlayer() == getPlayer1() ? getPlayer2() : getPlayer1());
+        return getCurrentPlayer();
     }
 
     /**
      * Drop the checker into the grid according to the player's movement.
-     * @param column the index of the column that the current player want to put a checker
+     * @param column the column number (starting from 1) that the current player wants to put a checker in
+     * @return true if the move is played successfully
+     * @throws IllegalMoveException if the played move is invalid
      */
-    public void playMove(int column) {
+    public boolean playMove(int column) {
+        column -= 1;
         if(!isValidMove(column))
             throw new IllegalMoveException();
 
         getGameGrid().getGrid().get(column).add(getCurrentPlayer().getTokenColor().getSymbol());
+        return true;
+    }
+
+    /**
+     * Return all the possible column numbers for users to put their checkers.
+     * @return the list of column numbers (starting from 1) which are available for a movement
+     */
+    public List<Integer> getAllPossibleMoves(){
+        List<Integer> possibleMove = new ArrayList<>();
+        for (int index = 0; index < getGameGrid().getWidth(); index ++){
+            if (isValidMove(index))
+                possibleMove.add(index + 1);
+        }
+        return possibleMove;
     }
 
     /**
