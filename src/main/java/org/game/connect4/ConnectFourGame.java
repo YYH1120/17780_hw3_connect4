@@ -4,7 +4,6 @@ import org.game.connect4.exception.IllegalMoveException;
 import org.game.connect4.util.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,6 +45,7 @@ public class ConnectFourGame {
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
+    private List<GridPosition> winningSequence;
 
     /**
      * Constructs a ConnectFour game with gameGrid, gameMode, player1 and player2.
@@ -60,13 +60,14 @@ public class ConnectFourGame {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
+        this.winningSequence = new ArrayList<>();
     }
 
     /**
      * Set the current player.
      * @param currentPlayer player of the current turn to set
      */
-    public void setCurrentPlayer(Player currentPlayer) {
+    private void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
@@ -108,6 +109,14 @@ public class ConnectFourGame {
      */
     public Player getPlayer2() {
         return player2;
+    }
+
+    public List<GridPosition> getWinningSequence() {
+        return winningSequence;
+    }
+
+    private void setWinningSequence(List<GridPosition> winningSequence) {
+        this.winningSequence = winningSequence;
     }
 
     /**
@@ -161,52 +170,33 @@ public class ConnectFourGame {
      * @param lastCol the index number of column that checker placed by the player who performed the last turn
      * @return the status of the Game as one of 'CONTINUE', 'PLAYER_1_WINS', 'PLAYER_2_WINS' or 'TIE'
      */
-    public GameStatus checkGameStatus(int lastCol){
+    public ConnectFourStatus checkGameStatus(int lastCol){
         lastCol -= 1;
         int lastRow = getGameGrid().getGrid().get(lastCol).size()-1;
         Character currColor = getCurrentPlayer().getTokenColor().getSymbol();
 
-        HashMap<Character,Integer> maxContinue = new HashMap<>();
-        maxContinue.put(TokenColor.RED.getSymbol(),1);
-        maxContinue.put(TokenColor.BLUE.getSymbol(),1);
-
-        // Check Row
-        int resCheckRow = checkRow(lastRow,lastCol,currColor);
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckRow));
-
-        // Check Column
-        int resCheckCol = checkCol(lastRow,lastCol,currColor);
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckCol));
-
-        // Check Right Diagonal
-        int resCheckRightDiagonal = checkRightDiagonal(lastRow,lastCol,currColor);
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckRightDiagonal));
-
-        // Check Left Diagonal
-        int resCheckLeftDiagonal = checkLeftDiagonal(lastRow,lastCol,currColor);
-        maxContinue.put(currColor, Math.max(maxContinue.get(currColor),resCheckLeftDiagonal));
-
-        //case 1: Player1 Win
-        if (maxContinue.get(getPlayer1().getTokenColor().getSymbol()) >=4){
-            return GameStatus.PLAYER_1_WINS;
+        if(checkRow(lastRow, lastCol, currColor) || checkCol(lastRow, lastCol, currColor) ||
+        checkLeftDiagonal(lastRow, lastCol, currColor) || checkRightDiagonal(lastRow, lastCol, currColor)) {
+            if (currColor == getPlayer1().getTokenColor().getSymbol()) {
+                return new ConnectFourStatus(GameStatus.PLAYER_1_WINS, getWinningSequence());
+            }
+            else
+                return new ConnectFourStatus(GameStatus.PLAYER_2_WINS, getWinningSequence());
         }
-
-        //case 2: Player2 Win
-        if (maxContinue.get(getPlayer2().getTokenColor().getSymbol()) >= 4){
-            return GameStatus.PLAYER_2_WINS;
+        else {
+            int totalOccupiedGrid = 0;
+            for (List<Character> c : getGameGrid().getGrid()){
+                totalOccupiedGrid += c.size();
+            }
+            //case 3: Tie
+            if (totalOccupiedGrid == getGameGrid().getHeight() * getGameGrid().getWidth()){
+                return new ConnectFourStatus(GameStatus.TIE, getWinningSequence());
+            }
+            // case 4: Game Continue
+            else {
+                return new ConnectFourStatus(GameStatus.CONTINUE, getWinningSequence());
+            }
         }
-
-        //case 3: Tie
-        int totalOccupiedGrid = 0;
-        for (List<Character> c : getGameGrid().getGrid()){
-            totalOccupiedGrid += c.size();
-        }
-        if (totalOccupiedGrid == getGameGrid().getHeight() * getGameGrid().getWidth()){
-            return GameStatus.TIE;
-        }
-
-        // case 4: Game Continue
-        return GameStatus.CONTINUE;
     }
 
     /**
@@ -216,13 +206,20 @@ public class ConnectFourGame {
      * @param currColor the color of the checker placed by the player who performed the last turn
      * @return the maximum number of consecutive checkers in row
      */
-    private int checkRow (int row, int col, Character currColor){
-        int maxContinueNum = 1;
-        while (row - 1 >= 0 && currColor == getGameGrid().getGrid().get(col).get(row-1)){
-            maxContinueNum += 1;
+    private boolean checkRow (int row, int col, Character currColor){
+        int maxSequence = 1;
+        List<GridPosition> winningSequence = new ArrayList<>();
+        winningSequence.add(new GridPosition(row + 1, col + 1));
+        while (row - 1 >= 0 && currColor == getGameGrid().getGrid().get(col).get(row - 1)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row, col + 1));
             row -= 1;
         }
-        return maxContinueNum;
+        if (maxSequence >= 4) {
+            setWinningSequence(winningSequence);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -232,19 +229,29 @@ public class ConnectFourGame {
      * @param currColor the color of the checker placed by the player who performed the last turn
      * @return the maximum number of consecutive checkers in column
      */
-    private int checkCol (int row, int col, Character currColor){
-        int maxContinueNum = 1;
+    private boolean checkCol (int row, int col, Character currColor){
+        int maxSequence = 1;
         int tempCol = col;
-        while (col - 1>=0 && row<getGameGrid().getGrid().get(col - 1).size() && currColor == getGameGrid().getGrid().get(col - 1).get(row)){
-            maxContinueNum += 1;
+        List<GridPosition> winningSequence = new ArrayList<>();
+        winningSequence.add(new GridPosition(row + 1, col + 1));
+        while (col - 1 >= 0 && row < getGameGrid().getGrid().get(col - 1).size() &&
+                currColor == getGameGrid().getGrid().get(col - 1).get(row)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row + 1, col));
             col -= 1;
         }
         col = tempCol;
-        while (col + 1<getGameGrid().getWidth() && row<getGameGrid().getGrid().get(col + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row)){
-            maxContinueNum += 1;
+        while (col + 1 < getGameGrid().getWidth() && row < getGameGrid().getGrid().get(col + 1).size() &&
+                currColor == getGameGrid().getGrid().get(col + 1).get(row)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row + 1, col + 2));
             col += 1;
         }
-        return maxContinueNum;
+        if (maxSequence >= 4) {
+            setWinningSequence(winningSequence);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -254,24 +261,34 @@ public class ConnectFourGame {
      * @param currColor the color of the checker placed by the player who performed the last turn
      * @return the maximum number of consecutive checkers in column in right diagonal
      */
-    private int checkRightDiagonal (int row, int col, Character currColor){
-        int maxContinueNum = 1;
+    private boolean checkRightDiagonal (int row, int col, Character currColor){
+        int maxSequence = 1;
         int tempRow = row;
         int tempCol = col;
-        while (col - 1>=0 && row-1>=0 && row - 1<getGameGrid().getGrid().get(col - 1).size() && currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
-            maxContinueNum += 1;
+        List<GridPosition> winningSequence = new ArrayList<>();
+        winningSequence.add(new GridPosition(row + 1, col + 1));
+        while (col - 1 >= 0 && row - 1 >= 0 && row - 1 < getGameGrid().getGrid().get(col - 1).size() &&
+                currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row, col));
             col -= 1;
             row -= 1;
         }
         row = tempRow;
         col = tempCol;
-        while (col + 1<getGameGrid().getWidth() && row + 1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col + 1).size()
-                && currColor == getGameGrid().getGrid().get(col + 1).get(row + 1)){
-            maxContinueNum += 1;
+        while (col + 1 < getGameGrid().getWidth() && row + 1 < getGameGrid().getHeight() &&
+                row + 1 < getGameGrid().getGrid().get(col + 1).size() &&
+                currColor == getGameGrid().getGrid().get(col + 1).get(row + 1)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row + 2, col + 2));
             col += 1;
             row += 1;
         }
-        return maxContinueNum;
+        if (maxSequence >= 4) {
+            setWinningSequence(winningSequence);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -281,24 +298,35 @@ public class ConnectFourGame {
      * @param currColor the color of the checker placed by the player who performed the last turn
      * @return the maximum number of consecutive checkers in column in left diagonal
      */
-    private int checkLeftDiagonal (int row, int col, Character currColor){
-        int maxContinueNum = 1;
+    private boolean checkLeftDiagonal (int row, int col, Character currColor){
+        int maxSequence = 1;
         int tempRow = row;
         int tempCol = col;
-        while (col + 1<getGameGrid().getWidth() && row-1>=0 && row - 1<getGameGrid().getGrid().get(col + 1).size() && currColor == getGameGrid().getGrid().get(col + 1).get(row - 1)){
-            maxContinueNum += 1;
+        List<GridPosition> winningSequence = new ArrayList<>();
+        winningSequence.add(new GridPosition(row + 1, col + 1));
+        while (col + 1 < getGameGrid().getWidth() && row - 1 >= 0 &&
+                row - 1 < getGameGrid().getGrid().get(col + 1).size() &&
+                currColor == getGameGrid().getGrid().get(col + 1).get(row - 1)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row, col + 2));
             col += 1;
             row -= 1;
         }
         row = tempRow;
         col = tempCol;
-        while (col -1>=0 && row +1<getGameGrid().getHeight() && row + 1<getGameGrid().getGrid().get(col - 1).size()
-                && currColor == getGameGrid().getGrid().get(col - 1).get(row + 1)){
-            maxContinueNum += 1;
+        while (col - 1 >= 0 && row + 1 < getGameGrid().getHeight() &&
+                row + 1 < getGameGrid().getGrid().get(col - 1).size() &&
+                currColor == getGameGrid().getGrid().get(col - 1).get(row + 1)){
+            maxSequence += 1;
+            winningSequence.add(new GridPosition(row + 2, col));
             col -= 1;
             row += 1;
         }
-        return maxContinueNum;
+        if (maxSequence >= 4) {
+            setWinningSequence(winningSequence);
+            return true;
+        }
+        return false;
     }
 
 }
