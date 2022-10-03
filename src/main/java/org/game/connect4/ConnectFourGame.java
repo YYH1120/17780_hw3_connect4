@@ -209,10 +209,10 @@ public class ConnectFourGame {
     private boolean checkRow (int row, int col, Character currColor){
         int maxSequence = 1;
         List<GridPosition> winningSequence = new ArrayList<>();
-        winningSequence.add(new GridPosition(row + 1, col + 1));
+        winningSequence.add(0, new GridPosition(row + 1, col + 1));
         while (row - 1 >= 0 && currColor == getGameGrid().getGrid().get(col).get(row - 1)){
             maxSequence += 1;
-            winningSequence.add(new GridPosition(row, col + 1));
+            winningSequence.add(0,new GridPosition(row, col + 1));
             row -= 1;
         }
         if (maxSequence >= 4) {
@@ -237,10 +237,11 @@ public class ConnectFourGame {
         while (col - 1 >= 0 && row < getGameGrid().getGrid().get(col - 1).size() &&
                 currColor == getGameGrid().getGrid().get(col - 1).get(row)){
             maxSequence += 1;
-            winningSequence.add(new GridPosition(row + 1, col));
+            winningSequence.add(0, new GridPosition(row + 1, col));
             col -= 1;
         }
         col = tempCol;
+
         while (col + 1 < getGameGrid().getWidth() && row < getGameGrid().getGrid().get(col + 1).size() &&
                 currColor == getGameGrid().getGrid().get(col + 1).get(row)){
             maxSequence += 1;
@@ -267,10 +268,11 @@ public class ConnectFourGame {
         int tempCol = col;
         List<GridPosition> winningSequence = new ArrayList<>();
         winningSequence.add(new GridPosition(row + 1, col + 1));
+
         while (col - 1 >= 0 && row - 1 >= 0 && row - 1 < getGameGrid().getGrid().get(col - 1).size() &&
                 currColor == getGameGrid().getGrid().get(col - 1).get(row - 1)){
             maxSequence += 1;
-            winningSequence.add(new GridPosition(row, col));
+            winningSequence.add(0, new GridPosition(row, col));
             col -= 1;
             row -= 1;
         }
@@ -304,11 +306,12 @@ public class ConnectFourGame {
         int tempCol = col;
         List<GridPosition> winningSequence = new ArrayList<>();
         winningSequence.add(new GridPosition(row + 1, col + 1));
+
         while (col + 1 < getGameGrid().getWidth() && row - 1 >= 0 &&
                 row - 1 < getGameGrid().getGrid().get(col + 1).size() &&
                 currColor == getGameGrid().getGrid().get(col + 1).get(row - 1)){
             maxSequence += 1;
-            winningSequence.add(new GridPosition(row, col + 2));
+            winningSequence.add(0, new GridPosition(row, col + 2));
             col += 1;
             row -= 1;
         }

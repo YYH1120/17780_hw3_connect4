@@ -19,6 +19,13 @@ public class ConnectFourStatus {
         this.winningSequence = winningSequence;
     }
 
+    public void displayWinningSequence(){
+        System.out.print("The winning sequences are:");
+        for (GridPosition p : getWinningSequence()){
+            System.out.print(" (" + p.getRow() + "," + p.getColumn() + ")");
+        }
+    }
+
     public GameStatus getGameStatus() {
         return gameStatus;
     }
