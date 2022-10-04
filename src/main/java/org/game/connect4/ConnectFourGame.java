@@ -156,7 +156,7 @@ public class ConnectFourGame {
      * @return true for the valid movement and false for the invalid movement
      */
     public boolean isValidMove(int column) {
-        return column >= 1 && column <= getGameGrid().getWidth() && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
+        return column >= 1 && column <= getGameGrid().getWidth() && getGameGrid().getGrid().get(column-1).size() < getGameGrid().getHeight();
     }
 
     /**
