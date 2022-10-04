@@ -1,7 +1,7 @@
 package org.game.connect4.util;
 
 /**
- * TokenColor enum enumerates the color of the two possible tokens in the ConnectFour game
+ * TokenColor enum enumerates the color of the two possible tokens in the ConnectFour game.
  */
 public enum TokenColor {
     /**

@@ -1,10 +1,10 @@
-package org.game.connect4;
+package org.game.connect4.model;
 
 import org.game.connect4.util.PlayerID;
 import org.game.connect4.util.TokenColor;
 
 /**
- * Player class is used to store a player's details
+ * Player class is used to store a player's details.
  */
 public class Player {
     /**

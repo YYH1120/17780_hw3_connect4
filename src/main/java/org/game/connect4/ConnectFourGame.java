@@ -1,41 +1,52 @@
 package org.game.connect4;
 
+import org.game.connect4.model.ConnectFourStatus;
+import org.game.connect4.model.GameGrid;
+import org.game.connect4.model.GridPosition;
+import org.game.connect4.model.Player;
 import org.game.connect4.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ConnectFourGame contains the main logic of the ConnectFour game and all the implementation of functions to play the game.
- * It provides the function of playing a move, switching players as well as checking game status.
- * It initializes with the game grid, game mode, the names of the players and the current player as well.
+ * ConnectFourGame contains the core logic of the ConnectFour game and all the functions required to play the game.
+ * It provides the function of playing a move, switching players and checking game status.
+ * It is initialized with the game grid, game mode and the names of the players.
  * <br />
  * Example Code -
  * <pre>
  *     {@code
  *     ConnectFourInitializer initializer = new ConnectFourInitializer();
  *     ConnectFourGame game = initializer.initializeDefaultPlayerVsPlayer(player1Name, player2Name);
- *     while (true){
- *             System.out.println(game.getCurrentPlayer().name() + " please input the column index (from 1 to "+ (game.getGameGrid().getWidth()) + ") you want to put a checker: ");
- *             int colIndex = input.nextInt() - 1;
- *             game.playMove(colIndex);
+ *     ConnectFourStatus gameStatus;
+ *         while (true){
+ *             System.out.println(game.getCurrentPlayer().getName() + " please input the
+ *             column index (from 1 to "+ (game.getGameGrid().getWidth()) + ") you want to put a checker: ");
+ *             int colIndex = input.nextInt();
+ *             // Handle invalid move
+ *             if (!game.playMove(colIndex)){
+ *                 System.out.println("Invalid Move! Try again");
+ *                 continue;
+ *             }
  *             game.getGameGrid().displayGrid();
  *             gameStatus = game.checkGameStatus(colIndex);
- *             if(gameStatus != GameStatus.CONTINUE)
+ *             if(gameStatus.getGameStatus() != GameStatus.CONTINUE)
  *                 break;
  *             game.switchPlayer();
  *         }
- *         if (gameStatus == GameStatus.PLAYER_1_WINS){
- *             System.out.println("Congrats! " + game.getPlayer1().name() + " has won the game!");
+ *         if (gameStatus.getGameStatus() == GameStatus.PLAYER_1_WINS){
+ *             System.out.println("Congrats! " + game.getPlayer1().getName() + " has won the game!");
+ *             gameStatus.displayWinningSequence();
  *         }
- *         else if (gameStatus == GameStatus.PLAYER_2_WINS){
- *             System.out.println("Congrats! " + game.getPlayer2().name() + " has won the game!");
+ *         else if (gameStatus.getGameStatus() == GameStatus.PLAYER_2_WINS){
+ *             System.out.println("Congrats! " + game.getPlayer2().getName() + " has won the game!");
+ *             gameStatus.displayWinningSequence();
  *         }
- *         else {
+ *         else{
  *             System.out.println("Game Tied!");
  *         }
- *
- *     }
+ *         }
  * </pre>
  */
 public class ConnectFourGame {
@@ -47,7 +58,7 @@ public class ConnectFourGame {
     private List<GridPosition> winningSequence;
 
     /**
-     * Constructs a ConnectFour game with gameGrid, gameMode, player1 and player2.
+     * Constructs a ConnectFour game with gameGrid, gameMode, player1 and player2
      * @param gameGrid the board of the game
      * @param gameMode one of the game modes: player to player, player to computer and computer to computer
      * @param player1 the first player
@@ -63,7 +74,7 @@ public class ConnectFourGame {
     }
 
     /**
-     * Set the current player.
+     * Set the current player
      * @param currentPlayer player of the current turn to set
      */
     private void setCurrentPlayer(Player currentPlayer) {
@@ -71,7 +82,7 @@ public class ConnectFourGame {
     }
 
     /**
-     * Get the current player.
+     * Get the current player
      * @return the player of the current turn
      */
     public Player getCurrentPlayer() {
@@ -79,7 +90,7 @@ public class ConnectFourGame {
     }
 
     /**
-     * Get the gameGrid.
+     * Get the gameGrid
      * @return the gameGrid of the game
      */
     public GameGrid getGameGrid() {
@@ -87,7 +98,7 @@ public class ConnectFourGame {
     }
 
     /**
-     * Get the gameMode.
+     * Get the gameMode
      * @return the gameMode of the game
      */
     public GameMode getGameMode() {
@@ -95,7 +106,7 @@ public class ConnectFourGame {
     }
 
     /**
-     * Get the first player.
+     * Get the first player
      * @return the first player
      */
     public Player getPlayer1() {
@@ -103,32 +114,40 @@ public class ConnectFourGame {
     }
 
     /**
-     * Get the second player.
+     * Get the second player
      * @return the second player
      */
     public Player getPlayer2() {
         return player2;
     }
 
-    public List<GridPosition> getWinningSequence() {
+    /**
+     * Get the winning sequence of the game
+     * @return a list of GridPosition sorted by row number representing the winning sequence
+     */
+    private List<GridPosition> getWinningSequence() {
         return winningSequence;
     }
 
+    /**
+     * Set the winning sequence of the game
+     * @param winningSequence a sequence of tokens having length >= 4
+     */
     private void setWinningSequence(List<GridPosition> winningSequence) {
         this.winningSequence = winningSequence;
     }
 
     /**
-     * Check whether the movement is valid.
-     * @param column the column number (starting from 1) that the current player wants to put a checker in
-     * @return true for the valid movement and false for the invalid movement.
+     * Check whether the movement is valid
+     * @param column the column number (starting from 1...) where the current player wants to put a token
+     * @return true for the valid movement and false for the invalid movement
      */
     public boolean isValidMove(int column) {
-        return column >= 0 && column < getGameGrid().getWidth() && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
+        return column >= 1 && column <= getGameGrid().getWidth() && getGameGrid().getGrid().get(column).size() < getGameGrid().getHeight();
     }
 
     /**
-     * Switching the current player's turn into the other player's turn.
+     * Switching the current player's turn into the other player's turn
      * @return the new current player after switching
      */
     public Player switchPlayer() {
@@ -137,22 +156,21 @@ public class ConnectFourGame {
     }
 
     /**
-     * Drop the checker into the grid according to the player's movement.
-     * @param column the column number (starting from 1) that the current player wants to put a checker in
+     * Drop the token into the grid according to the player's movement
+     * @param column the column number (starting from 1...) where the current player wants to put a token
      * @return true if the move is played successfully
      */
     public boolean playMove(int column) {
-        column -= 1;
         if(!isValidMove(column))
             return false;
-
+        column -= 1;
         getGameGrid().getGrid().get(column).add(getCurrentPlayer().getTokenColor().getSymbol());
         return true;
     }
 
     /**
-     * Return all the possible column numbers for users to put their checkers.
-     * @return the list of column numbers (starting from 1) which are available for a movement
+     * Return all the possible column numbers for users to put their tokens
+     * @return the list of column numbers (starting from 1...) which are available for a movement
      */
     public List<Integer> getAllPossibleMoves(){
         List<Integer> possibleMove = new ArrayList<>();
@@ -164,9 +182,9 @@ public class ConnectFourGame {
     }
 
     /**
-     * Check the game status to determine if players have won/tied/or should continue.
-     * @param lastCol the index number of column that checker placed by the player who performed the last turn
-     * @return the status of the Game as one of 'CONTINUE', 'PLAYER_1_WINS', 'PLAYER_2_WINS' or 'TIE'
+     * Check the game status to determine if players have won/tied/or should continue
+     * @param lastCol the number of column (starting from 1...) where the last player placed the token
+     * @return ConnectFourStatus object which stores both game status and winning sequences
      */
     public ConnectFourStatus checkGameStatus(int lastCol){
         lastCol -= 1;
@@ -198,11 +216,12 @@ public class ConnectFourGame {
     }
 
     /**
-     * Check if there are four consecutive checkers of the same color in row.
-     * @param row the index number of row that checker placed by the player who performed the last turn
-     * @param col the index number of column that checker placed by the player who performed the last turn
-     * @param currColor the color of the checker placed by the player who performed the last turn
-     * @return the maximum number of consecutive checkers in row
+     * Check if there are four or more consecutive tokens of the same color in row and
+     * set the winning sequence if some player wins
+     * @param row the index number of row that has the token placed by the last player who played the last turn
+     * @param col the index number of column that has the token placed by the player who played the last turn
+     * @param currColor the color of the token placed by the player who played the last turn
+     * @return true if the length of the longest row sequence is greater than or equal to 4 and false otherwise
      */
     private boolean checkRow (int row, int col, Character currColor){
         int maxSequence = 1;
@@ -221,11 +240,12 @@ public class ConnectFourGame {
     }
 
     /**
-     * Check if there are four consecutive checkers of the same color in column.
-     * @param row the index number of row that checker placed by the player who performed the last turn
-     * @param col the index number of column that checker placed by the player who performed the last turn
-     * @param currColor the color of the checker placed by the player who performed the last turn
-     * @return the maximum number of consecutive checkers in column
+     * Check if there are four or more consecutive tokens of the same color in a column and
+     * set the winning sequence if some player wins
+     * @param row the index number of row that has the token placed by the last player who played the last turn
+     * @param col the index number of column that has the token placed by the player who played the last turn
+     * @param currColor the color of the token placed by the player who played the last turn
+     * @return true if the length of the longest column sequence is greater than or equal to 4 and false otherwise
      */
     private boolean checkCol (int row, int col, Character currColor){
         int maxSequence = 1;
@@ -254,11 +274,12 @@ public class ConnectFourGame {
     }
 
     /**
-     * Check if there are four consecutive checkers of the same color in right diagonal.
-     * @param row the index number of row that checker placed by the player who performed the last turn
-     * @param col the index number of column that checker placed by the player who performed the last turn
-     * @param currColor the color of the checker placed by the player who performed the last turn
-     * @return the maximum number of consecutive checkers in column in right diagonal
+     * Check if there are four or more consecutive tokens of the same color in right diagonal and
+     * set the winning sequence if some player wins
+     * @param row the index number of row that has the token placed by the last player who played the last turn
+     * @param col the index number of column that has the token placed by the player who played the last turn
+     * @param currColor the color of the token placed by the player who played the last turn
+     * @return true if the length of the longest right diagonal sequence is greater than or equal to 4 and false otherwise
      */
     private boolean checkRightDiagonal (int row, int col, Character currColor){
         int maxSequence = 1;
@@ -292,11 +313,12 @@ public class ConnectFourGame {
     }
 
     /**
-     * Check if there are four consecutive checkers of the same color in left diagonal.
-     * @param row the index number of row that checker placed by the player who performed the last turn
-     * @param col the index number of column that checker placed by the player who performed the last turn
-     * @param currColor the color of the checker placed by the player who performed the last turn
-     * @return the maximum number of consecutive checkers in column in left diagonal
+     * Check if there are four or more consecutive tokens of the same color in left diagonal and
+     * set the winning sequence if some player wins
+     * @param row the index number of row that has the token placed by the last player who played the last turn
+     * @param col the index number of column that has the token placed by the player who played the last turn
+     * @param currColor the color of the token placed by the player who played the last turn
+     * @return true if the length of the longest left diagonal sequence is greater than or equal to 4 and false otherwise
      */
     private boolean checkLeftDiagonal (int row, int col, Character currColor){
         int maxSequence = 1;

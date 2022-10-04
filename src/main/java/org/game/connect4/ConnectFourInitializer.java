@@ -1,6 +1,8 @@
 package org.game.connect4;
 
 import org.game.connect4.exception.InvalidDimensionException;
+import org.game.connect4.model.GameGrid;
+import org.game.connect4.model.Player;
 import org.game.connect4.util.GameConstants;
 import org.game.connect4.util.GameMode;
 import org.game.connect4.util.PlayerID;
@@ -12,6 +14,11 @@ import org.game.connect4.util.TokenColor;
  * This is not an exhaustive list of methods. Similar functionalities can be implemented in the client code.
  */
 public class ConnectFourInitializer {
+
+    /**
+     * Constructs a default ConnectFourInitializer
+     */
+    public ConnectFourInitializer() {}
 
     /**
      * Constructs a new ConnectFourGame for Player Vs Player mode with default settings of token color and grid dimensions

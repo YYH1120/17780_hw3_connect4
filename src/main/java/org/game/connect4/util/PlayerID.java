@@ -1,7 +1,7 @@
 package org.game.connect4.util;
 
 /**
- * PlayerID enum enumerates the id of the two possible players in the ConnectFour game
+ * PlayerID enum enumerates the id of the two possible players in the ConnectFour game.
  */
 public enum PlayerID {
     /**

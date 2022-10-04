@@ -1,4 +1,4 @@
-package org.game.connect4;
+package org.game.connect4.model;
 
 import org.game.connect4.util.GameConstants;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * GameGrid represents the main grid of the ConnectFour game with slots for a token
+ * GameGrid represents the main grid of the ConnectFour game with slots for a token.
  */
 public class GameGrid {
     /**
