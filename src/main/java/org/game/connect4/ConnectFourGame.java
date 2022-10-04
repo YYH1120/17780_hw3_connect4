@@ -1,6 +1,5 @@
 package org.game.connect4;
 
-import org.game.connect4.exception.IllegalMoveException;
 import org.game.connect4.util.*;
 
 import java.util.ArrayList;
@@ -141,12 +140,11 @@ public class ConnectFourGame {
      * Drop the checker into the grid according to the player's movement.
      * @param column the column number (starting from 1) that the current player wants to put a checker in
      * @return true if the move is played successfully
-     * @throws IllegalMoveException if the played move is invalid
      */
     public boolean playMove(int column) {
         column -= 1;
         if(!isValidMove(column))
-            throw new IllegalMoveException();
+            return false;
 
         getGameGrid().getGrid().get(column).add(getCurrentPlayer().getTokenColor().getSymbol());
         return true;
