@@ -13,7 +13,20 @@ import java.util.List;
  * ConnectFourGame contains the core logic of the ConnectFour game and all the functions required to play the game.
  * It provides the function of playing a move, switching players and checking game status.
  * It is initialized with the game grid, game mode and the names of the players.
- * <br />
+ *
+ * To use the Connect Four API, you can add the connect4.jar file to your project directory and add the
+ * following dependency to your pom.xml file.
+ * <pre>
+ *     {@code
+ *     <dependency>
+ *         <groupId>org.game</groupId>
+ *         <artifactId>connect4</artifactId>
+ *         <version>4.0.0</version>
+ *         <scope>system</scope>
+ *         <systemPath>${project.basedir}/lib/connect4.jar</systemPath>
+ *     </dependency>
+ *     }
+ * </pre>
  * Example Code -
  * <pre>
  *     {@code
